@@ -5,22 +5,23 @@
 from time import sleep      # Import sleep from time
 import RPi.GPIO as GPIO     # Import Standard GPIO Module
 
-GPIO.setmode(GPIO.BCM)      # Set GPIO mode to BCM
+GPIO.setmode(GPIO.BOARD)      # Set GPIO mode to BCM
+GPIO.setwarnings(False);
 
 # PWM Frequency
 pwmFreq = 100
 
 # Setup Pins for motor controller
-GPIO.setup(18, GPIO.OUT)    # PWMA
-GPIO.setup(23, GPIO.OUT)    # AIN2
-GPIO.setup(24, GPIO.OUT)    # AIN1
-GPIO.setup(25, GPIO.OUT)    # STBY
-GPIO.setup(22, GPIO.OUT)    # BIN1
-GPIO.setup(27, GPIO.OUT)    # BIN2
-GPIO.setup(13, GPIO.OUT)    # PWMB
+GPIO.setup(12, GPIO.OUT)    # PWMA
+GPIO.setup(18, GPIO.OUT)    # AIN2
+GPIO.setup(16, GPIO.OUT)    # AIN1
+GPIO.setup(22, GPIO.OUT)    # STBY
+GPIO.setup(15, GPIO.OUT)    # BIN1
+GPIO.setup(13, GPIO.OUT)    # BIN2
+GPIO.setup(11, GPIO.OUT)    # PWMB
 
-pwma = GPIO.PWM(18, pwmFreq)    # pin 18 to PWM  
-pwmb = GPIO.PWM(13, pwmFreq)    # pin 13 to PWM
+pwma = GPIO.PWM(12, pwmFreq)    # pin 18 to PWM  
+pwmb = GPIO.PWM(11, pwmFreq)    # pin 13 to PWM
 pwma.start(100)
 pwmb.start(100)
 
@@ -43,7 +44,7 @@ def turnRight(spd):
     runMotor(1, spd, 0)
 
 def runMotor(motor, spd, direction):
-    GPIO.output(25, GPIO.HIGH);
+    GPIO.output(22, GPIO.HIGH);
     in1 = GPIO.HIGH
     in2 = GPIO.LOW
 
@@ -52,27 +53,17 @@ def runMotor(motor, spd, direction):
         in2 = GPIO.HIGH
 
     if(motor == 0):
-        GPIO.output(23, in1)
-        GPIO.output(24, in2)
-        #GPIO.output(18, GPIO.HIGH)
+        GPIO.output(16, in1)
+        GPIO.output(18, in2)
         pwma.ChangeDutyCycle(spd)
     elif(motor == 1):
-        GPIO.output(22, in1)
-        GPIO.output(27, in2)
-        #GPIO.output(17, GPIO.HIGH)
+        GPIO.output(15, in1)
+        GPIO.output(13, in2)
         pwmb.ChangeDutyCycle(spd)
 
 
 def motorStop():
-    GPIO.output(25, GPIO.LOW)
-#    if(motor == 0):
-#        GPIO.output(23, GPIO.LOW)
-#        GPIO.output(24, GPIO.LOW)
-#        GPIO.output(18, GPIO.LOW)
-#    elif(motor == 1):
-#        GPIO.output(22, GPIO.LOW)
-#        GPIO.output(27, GPIO.LOW)
-#        GPIO.output(17, GPIO.LOW)
+    GPIO.output(22, GPIO.LOW)
 
 ## Main
 ##############################################################################
